@@ -1,15 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Typography, ListItem} from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-const PlantListItem = ({ plant }) => {
+
+const PlantListItem = ({ plant, OpenFormConfirmDelete }) => {
+    
     return (
        <ListItem>
            <Typography>{plant.name}</Typography>
-           <Button onClick={OpenPlantDetails}><PreviewIcon /></Button>
-            <Button><EditIcon /></Button>
-            <Button><DeleteForeverIcon /></Button>
+            <Button><Link to={`/plant-details/${plant._id}`} replace><PreviewIcon /></Link></Button>
        </ListItem>
     )
 }

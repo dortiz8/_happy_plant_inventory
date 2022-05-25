@@ -23,6 +23,16 @@ export const getPlants = async (req, res) =>{
     }
 }
 
+export const getPlant = async (req, res)=>{
+    const {id} = req.params
+    try {
+        let result = await PlantModel.findById(id)
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 export const deletePlant = async (req, res) =>{
     //Access the id sent with request
     const {id} = req.params; 

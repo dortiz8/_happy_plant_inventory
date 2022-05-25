@@ -3,7 +3,7 @@ import express from 'express';
 // Specific to Node.js
 
 // Import controllers 
-import {addPlant, getPlants, deletePlant} from '../controllers/plants.js'
+import {addPlant, getPlants, getPlant, deletePlant} from '../controllers/plants.js'
 const router = express.Router(); 
 
 // Products
@@ -14,6 +14,7 @@ router.get('/', (req,res)=>{
 // Plants 
 router.post('/add-plant', addPlant)
 router.get('/view-plants', getPlants)
+router.get('/view-plant/:id', getPlant)
 router.get('/delete-plant/:id', deletePlant)
 
 export default router; 
