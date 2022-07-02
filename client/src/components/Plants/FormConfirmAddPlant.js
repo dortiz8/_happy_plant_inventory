@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Typography, Box, List, ListItem } from '@mui/material';
 
 const FormConfirmAddPlant = ({ plantInfo, setFormConfirmVisible, handleSubmit}) => {
-  
+    
     return (
         <Box sx={{ backgroundColor: '#DFF0DA'}}>
             <Box>

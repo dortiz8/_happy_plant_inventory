@@ -15,6 +15,8 @@ dotenv.config();
 app.use(express.urlencoded({limit: "300mb", extended: true})); 
 app.use(express.json({limit: "30mb", extended: true})); 
 app.use(cors()); 
+//app.use(function (req, res, next) { setTimeout(next, 2000) });
+
 
 // Specific Routes
 app.use('/plants', plantRoutes); 

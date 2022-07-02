@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Typography, Box} from '@mui/material';
 
 const FormConfirmClear = ({ handleClearForm, setFormConfirmClearVisible}) => {
+    console.log('confirmClear')
     function handleClear(){
         handleClearForm(); 
         setFormConfirmClearVisible(false)

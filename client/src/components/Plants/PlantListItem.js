@@ -7,7 +7,8 @@ const PlantListItem = ({ plant, OpenFormConfirmDelete }) => {
     
     return (
        <ListItem>
-           <Typography>{plant.name}</Typography>
+            <Typography sx={{marginRight: '5px'}}>{plant.name}</Typography>
+            <Typography variant="caption">{plant.category}</Typography>
             <Button><Link to={`/plant-details/${plant._id}`} replace><PreviewIcon /></Link></Button>
        </ListItem>
     )

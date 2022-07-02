@@ -1,64 +1,109 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { fetchOnePlant } from '../../store/plants';
-import { Button, Typography, Card, CardMedia, CardContent, CardActions, Box, Input, InputLabel} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import { useParams } from 'react-router-dom';
+
+import { useParams, useNavigate} from 'react-router-dom';
+// Redux store functions
+import { deletePlant, editPlant} from '../../store/plantsSlice';
+import {fetchPlant, SelectSinglePlant, getPlantStatus, getPlantError, resetState} from '../../store/plantSlice'; 
+// Meterial UI Section
+import { Card, Box} from '@mui/material';
+
+// Other Imports 
+import FormConfirmDelete from './FormConfirmDelete';
+import { PlantObjectValidator } from '../../services/validation';
+import LoadingSpinner from '../Common/LoadingSpinner';
+import ErrorMessage from '../Common/ErrorMessage';
+import EditContent from './PlantCard/EditContent';
+import PresentationContent from './PlantCard/PresentationContent';
 const PlantCard = () => { 
     const { id } = useParams();
-    const plant = useSelector((state) => state.plants.plant.data); 
+    const plant = useSelector(SelectSinglePlant); 
+    const plantStatus = useSelector(getPlantStatus); 
+    const plantError = useSelector(getPlantError); 
+    const [plantInfo, setPlantInfo] = useState({});
     const [editMode, setEditMode] = useState(false); 
+    const [formConfirmDeleteVisible, setFormConfirmDeleteVisible] = useState(false); 
+    const [formHasAllRequiredFields, setFormHasAllRequiredFields] = useState(true);
+    const [inputOfNumberValid, setInputOfNumberValid] = useState(true);
     const dispatch = useDispatch(); 
+    const navigate = useNavigate(); 
     
-    useEffect(()=>{
-        dispatch(fetchOnePlant(id))
+    useEffect(() => {
+        if(plantStatus == 'idle'){
+            dispatch(fetchPlant(id))
+        }
         
-    },[id])
+    }, [plantStatus, id, dispatch]); 
+    useEffect(()=>{
+        setPlantInfo(plant)
+    }, [plant]); 
 
-    function handleInputChange(){
+    useEffect(()=>{
+        return () =>{
+            dispatch(resetState()); 
+        }
+    }, [])
+    let content; 
 
+    if(plantStatus == 'loading'){
+        content = <LoadingSpinner />
+    } else if(plantStatus == 'succeeded'){
+        content = <PresentationContent plant={plant} handleEditMode={handleEditMode} setFormConfirmDeleteVisible={setFormConfirmDeleteVisible}/>
+    } else if(plantStatus == 'failed'){
+        content = <ErrorMessage /> 
+    }
+
+    function handleInputChange(event){
+        let newObj = {};
+        if (!isNaN(parseInt(event.target.value))) {
+            newObj[event.target.name] = parseInt(event.target.value);
+        } else {
+            newObj[event.target.name] = event.target.value;
+        }
+        setPlantInfo({
+            ...plantInfo,
+            ...newObj
+        })
     }
     function handleEditMode(){
-        setEditMode(!editMode)
-    }
-    return (
+        setEditMode(!editMode);  
+    }; 
 
-            <Card sx={{margin: "10px"}}>          
-                <CardMedia component="img" height="200"  image={`${plant?.selectedFiles[0].base64}`} />
-                    { editMode ? (
-                        <CardContent>
-                            <Box>
-                                <Input name='name' sx={{ display: 'block' }} placeholder={`Name: ${plant?.name}`} onChange={handleInputChange}></Input>
-                                <Input name='category' sx={{ display: 'block' }} placeholder={`Category: ${plant?.category}`} onChange={handleInputChange}></Input>
-                                <Input name='size' sx={{ display: 'block' }} placeholder={`Size: ${plant?.size}`} onChange={handleInputChange}></Input>
-                                <Input name='status' sx={{ display: 'block' }} placeholder={`Status: ${plant?.status}`} onChange={handleInputChange}></Input>
-                                <Input name='price' sx={{ display: 'block' }} placeholder={`Price: ${plant?.price}`} onChange={handleInputChange}></Input>
-                            </Box>
-                        </CardContent>
+    function handleSaveEdit(){
+        let PlantValidator = new PlantObjectValidator(plantInfo)
+        let result = PlantValidator.validate(); 
+        setFormHasAllRequiredFields(PlantValidator.hasAllRequiredFields);
+        setInputOfNumberValid(PlantValidator.inputNumberIsValid);
+        if(result){
+            dispatch(editPlant(plantInfo));
+            navigate('/plants', {replace: true}); 
+            
+        } 
+    }; 
+
+    function handleDeleteItem(){
+        dispatch(deletePlant(id)); 
+        navigate('/plants', {replace: true}); 
+    }; 
+    
+    return (
+            <Box>
+            {formConfirmDeleteVisible && <FormConfirmDelete handleDeleteItem={handleDeleteItem} setFormConfirmDeleteVisible={setFormConfirmDeleteVisible} /> }
+                <Card sx={{ margin: "10px" }}>
+                    {editMode ? (
+                    <EditContent plant={plant} plantInfo={plantInfo}
+                              formHasAllRequiredFields={formHasAllRequiredFields}
+                              inputOfNumberValid={inputOfNumberValid} 
+                              handleSaveEdit={handleSaveEdit}
+                              handleEditMode={handleEditMode}
+                              handleInputChange={handleInputChange}
+                              />
                     ) : (
-                    <CardContent>
-                        <Typography variant='h4'>{plant?.name}</Typography>
-                        <Typography><b>Category: </b>{plant?.category}</Typography>
-                        <Typography><b>Size: </b>{plant?.size}</Typography>
-                        <Typography><b>Status: </b>{plant?.status}</Typography>
-                        <Typography><b>Price: </b>${plant?.price}</Typography>
-                    </CardContent>
-                    )
-                    
-                    }
-                    
-                
-                <CardActions>
-                    <Link to="/plants" replace><ArrowLeftIcon /></Link>
-                    <Button onClick={handleEditMode}>{
-                    editMode ? <DeleteForeverIcon/> : <EditIcon />
-                    }</Button>
-                    <Button color="warning"><DeleteForeverIcon /></Button>
-                </CardActions> 
-            </Card>
+                        content
+                    )}
+                </Card>
+            </Box>
+           
         
       
     )

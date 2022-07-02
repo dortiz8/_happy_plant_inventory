@@ -3,8 +3,7 @@ import React, {useEffect} from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 // Import Redux components
 import { useDispatch } from 'react-redux'; 
-// Import Redux store components
-import { fetchAllPlants } from './store/plants'
+
 // Import Components 
 import Navbar from './components/Navbar/Navbar.js';
 import Home from './components/Home/Home.js'; 
@@ -17,10 +16,6 @@ import NotFound from './components/Errors/NotFound'
 // Import material UI
 
 const App = () => {
-    const dispatch = useDispatch(); 
-    useEffect(()=>{
-        dispatch(fetchAllPlants())
-    }, [dispatch])
 
     return(
         <div>

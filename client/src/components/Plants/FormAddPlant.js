@@ -2,7 +2,7 @@ import React from 'react';
 import {useState, useEffect} from 'react'; 
 import { useDispatch, useSelector } from 'react-redux'; 
 // Redux store functions
-import { createNewPlant} from '../../store/plants';
+import { createNewPlant} from '../../store/plantsSlice';
 // Material UI Section 
 import { Button, Typography, Paper, Box, Input, InputLabel, Select, MenuItem, List, ListItem} from '@mui/material';
 import CloseRounded from '@mui/icons-material/CloseRounded'; 
@@ -14,6 +14,8 @@ import plantCategories from '../../lists/plantCategories';
 import sizes from '../../constants/sizes'; 
 import {CHARACTER_LIMIT} from '../../constants/limits'; 
 import selectedFile from '../../models/fileClass'; 
+import { useNavigate } from 'react-router';
+import { PlantObjectValidator } from '../../services/validation';
 let blankState = {name: "", category: "", quantity: 0, size: "", description: "", price: 0, selectedFiles: []}
 const FormAddPlant = (e) => {
     // Component State section 
@@ -24,7 +26,7 @@ const FormAddPlant = (e) => {
     const [formConfirmVisible, setFormConfirmVisible] = useState(false); 
     const [formConfirmClearVisible, setFormConfirmClearVisible] = useState(false); 
     const dispatch = useDispatch()
-    console.log(plantInfo)
+    const navigate = useNavigate()
 
     useEffect(()=>{
         localStorage.setItem('plantInfo', JSON.stringify(plantInfo))
@@ -74,7 +76,9 @@ const FormAddPlant = (e) => {
     function handleSubmit(e){
         dispatch(createNewPlant(plantInfo));
         setFormConfirmVisible(false); 
-
+        setPlantInfo({...blankState})
+        localStorage.removeItem('plantInfo'); 
+        navigate('/plants')
     }
 
     function handleClearForm(){
@@ -82,23 +86,11 @@ const FormAddPlant = (e) => {
     }
 
     function submitValidation(){
-        let result = true; 
-        if(!(plantInfo.name.trim() !== "" && plantInfo.category.trim() !== "" && plantInfo.quantity !== 0 && plantInfo.size.trim() !== "" && plantInfo.description.trim()  !== "" && plantInfo.price !== 0 && plantInfo.selectedFiles.length !== 0)){
-            result = false; 
-            setFormHasAllRequiredFields(false);
-        } else if (isNaN(parseInt(plantInfo.quantity)) || parseInt(plantInfo.quantity) < 0){
-            result = false; 
-            setInputOfNumberValid(false);
-            setFormHasAllRequiredFields(true);
-        } else if (parseInt(plantInfo.price) < 0){
-            result = false; 
-            setInputOfNumberValid(false);
-            setFormHasAllRequiredFields(true);
-        } else {
-            setFormHasAllRequiredFields(true);
-            setInputOfNumberValid(true);
-            return result; 
-        }
+        let PlantValidator = new PlantObjectValidator(plantInfo); 
+        let result  = PlantValidator.validate(); 
+        setFormHasAllRequiredFields(PlantValidator.hasAllRequiredFields); 
+        setInputOfNumberValid(PlantValidator.inputNumberIsValid); 
+        return result; 
     }
     
     return (
