@@ -78,7 +78,7 @@ const FormAddPlant = (e) => {
         setFormConfirmVisible(false); 
         setPlantInfo({...blankState})
         localStorage.removeItem('plantInfo'); 
-        navigate('/plants')
+        navigate('/plants', {replace: true})
     }
 
     function handleClearForm(){

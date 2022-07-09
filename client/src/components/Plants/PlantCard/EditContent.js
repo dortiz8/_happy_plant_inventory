@@ -41,11 +41,8 @@ const EditContent = ({ plant, plantInfo, formHasAllRequiredFields, inputOfNumber
                 </Box>
                 <Box>
                     <FormControl fullWidth>
-                        <InputLabel id="status">Status</InputLabel>
-                        <Select label="status" name="status" id="status" value={plantInfo?.status} onChange={handleInputChange}>
-                            <MenuItem value=""> -- </MenuItem>
-                            {statuses.map(status => <MenuItem key={statuses.indexOf(status)} value={status}>{status}</MenuItem>)}
-                        </Select>
+                        <InputLabel id="status">Quantity</InputLabel>
+                            <Input name='quantity' type="number" id="price" value={plantInfo?.quantity} sx={{ display: 'block' }} placeholder={`Price: $${plantInfo?.quantity}`} onChange={handleInputChange}></Input>
                     </FormControl>
                 </Box>
                 <FormControl fullWidth>

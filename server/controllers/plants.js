@@ -4,11 +4,11 @@ import PlantModel from '../models/plantModel.js'
 export const addPlant = async(req, res) => {
     //Access the request body 
     let plantInfo = req.body; 
-    const newPlant = new PlantModel({...plantInfo}); 
-    try{
-        await newPlant.save(); 
+    const newPlant = new PlantModel({ ...plantInfo });
+    try {
+        await newPlant.save();
         res.status(201).json(newPlant);
-    } catch(error){
+    } catch (error) {
         console.log(error)
     }
 }
