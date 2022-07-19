@@ -77,7 +77,6 @@ const PlantCard = () => {
         if(result){
             dispatch(editPlant(plantInfo));
             navigate('/plants', {replace: true}); 
-            
         } 
     }; 
 

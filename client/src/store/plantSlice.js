@@ -22,7 +22,6 @@ const slice = createSlice({
             })
             .addCase(fetchPlant.fulfilled, (state, action) => {
                 if(action.payload != undefined){
-                    console.log(action.payload, " payload from store")
                     state.plant.data = action.payload
                     state.status = 'succeeded'
                 }else{
@@ -50,7 +49,6 @@ export const resetPlantstate = async ()=>{
 
 export const fetchPlant = createAsyncThunk('plant/fetchPlant', async (id) => {
     try {
-        console.log(id)
         let { data } = await api.fetchOnePlant(id);
         return data
     } catch (error) {

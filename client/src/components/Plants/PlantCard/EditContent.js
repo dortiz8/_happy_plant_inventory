@@ -41,13 +41,19 @@ const EditContent = ({ plant, plantInfo, formHasAllRequiredFields, inputOfNumber
                 </Box>
                 <Box>
                     <FormControl fullWidth>
-                        <InputLabel id="status">Quantity</InputLabel>
-                            <Input name='quantity' type="number" id="price" value={plantInfo?.quantity} sx={{ display: 'block' }} placeholder={`Price: $${plantInfo?.quantity}`} onChange={handleInputChange}></Input>
+                        <InputLabel id="quantity">Quantity</InputLabel>
+                            <Input name='quantity' type="number" id="quantity" value={plantInfo?.quantity} sx={{ display: 'block' }} placeholder={plantInfo?.quantity.toString()} onChange={handleInputChange}></Input>
+                    </FormControl>
+                </Box>
+                <Box>
+                    <FormControl fullWidth>
+                        <InputLabel id="description">Description</InputLabel>
+                        <Input name='description' type="text" id="description" value={plantInfo?.description} sx={{ display: 'block' }} placeholder={plantInfo?.description.toString()} onChange={handleInputChange}></Input>
                     </FormControl>
                 </Box>
                 <FormControl fullWidth>
                     <InputLabel id="price">Price</InputLabel>
-                    <Input name='price' type="number" id="price" value={plantInfo?.price} sx={{ display: 'block' }} placeholder={`Price: $${plantInfo?.price}`} onChange={handleInputChange}></Input>
+                    <Input name='price' type="number" id="price" value={plantInfo?.price} sx={{ display: 'block' }} placeholder={plantInfo?.price.toString()} onChange={handleInputChange}></Input>
                 </FormControl>
             </Box>
         </CardContent>

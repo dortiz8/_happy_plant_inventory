@@ -14,6 +14,7 @@ const PresentationContent = ({ plant, handleEditMode, setFormConfirmDeleteVisibl
             <Typography><b>Category: </b>{plant?.category}</Typography>
             <Typography><b>Size: </b>{plant?.size}</Typography>
             <Typography><b>Quantity: </b>{plant?.quantity}</Typography>
+            <Typography><b>Description: </b>{plant?.description}</Typography>
             <Typography><b>Price: </b>${plant?.price}</Typography>
         </CardContent>
         <CardActions>
