@@ -1,0 +1,1 @@
+export const plantType = ["Node", "Cutting", "Full Plant"]

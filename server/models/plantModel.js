@@ -25,9 +25,30 @@ const plantSchema = mongoose.Schema({
         default: 'active'
     }
 }); 
+const selectedFileSchema = mongoose.Schema({
+    base64: String, 
+    name: String, 
+    size: Number, 
+    type: String,
+})
+const plantDetailsSchema = mongoose.Schema({
+    description: String, 
+    idx: Number, 
+    price: Number,
+    saved: Boolean, 
+    selectedFiles: [selectedFileSchema],
+    type: String, 
+
+})
+const plantObjectSchema = mongoose.Schema({
+    name: String, 
+    category: String, 
+    multiple: [plantDetailsSchema], 
+})
+
 
 // Use schema to create a model
-const PlantModel = mongoose.model('plant_inventory', plantSchema); 
+const PlantModel = mongoose.model('plant_inventory', plantObjectSchema);
 
 export default PlantModel; 
 

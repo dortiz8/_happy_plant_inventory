@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Typography, CardMedia, CardContent, CardActions, Box } from '@mui/material';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 const PresentationContent = ({ plant, handleEditMode, setFormConfirmDeleteVisible, handleResetState}) => {
 
     return (
@@ -24,6 +25,7 @@ const PresentationContent = ({ plant, handleEditMode, setFormConfirmDeleteVisibl
                     <EditIcon />
                 </Button>
                 <Button color="warning" onClick={() => setFormConfirmDeleteVisible(true)}><DeleteForeverIcon /></Button>
+                <Button ><PostAddIcon /></Button>
             </Box>
         </CardActions>
         </>
