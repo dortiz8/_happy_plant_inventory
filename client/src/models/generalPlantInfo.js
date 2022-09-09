@@ -1,7 +1,7 @@
 export default class generalPlantInfo {
     constructor(name, type) {
         this.name = name;
-        this.category = type;
+        this.genus = type;
         this.multiple = []; 
     }
 

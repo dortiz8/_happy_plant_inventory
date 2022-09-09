@@ -1,0 +1,1 @@
+export default ["Node", "Cutting", "Full Plant"]

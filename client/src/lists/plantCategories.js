@@ -1,1 +1,0 @@
-export default ["Flowerind", "Low Light", "Foliage", "Cactus", "Palm", "Hanging", "Trailing & Climbing", "Bulbous", "Tree", "Succulent", "Stone", "Unusual"]; 

@@ -6,7 +6,7 @@ export class PlantObjectValidator{
     }
     
     validatePlantObject(){ 
-        if (this.plantInfo.name.trim() == "" || this.plantInfo.category.trim() == "" ) {
+        if (this.plantInfo.name.trim() == "" || this.plantInfo.genus.trim() == "" ) {
             this.hasAllRequiredFields = false; 
         }
         return this.hasAllRequiredFields && this.inputNumberIsValid; ;

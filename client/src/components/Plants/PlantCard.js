@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate} from 'react-router-dom';
 // Redux store functions
 import { deletePlant, editPlant} from '../../store/plantsSlice';
-import {fetchPlant, SelectSinglePlant, getPlantStatus, getPlantError, resetState} from '../../store/plantSlice'; 
+import {fetchPlant, SelectSinglePlant, getPlantStatus, getPlantError, resetState, getPlantParentName} from '../../store/plantSlice'; 
 // Meterial UI Section
-import { Card, Box} from '@mui/material';
+import { Card, Box, Typography} from '@mui/material';
 
 // Other Imports 
 import FormConfirmDelete from './FormConfirmDelete';
@@ -15,9 +15,12 @@ import LoadingSpinner from '../Common/LoadingSpinner';
 import ErrorMessage from '../Common/ErrorMessage';
 import EditContent from './PlantCard/EditContent';
 import PresentationContent from './PlantCard/PresentationContent';
+import { setFileSelection } from '../../services/fileSelection';
+
 const PlantCard = () => { 
-    const { id } = useParams();
+    const { sectionId, id } = useParams();
     const plant = useSelector(SelectSinglePlant); 
+    const plantParentName = useSelector(getPlantParentName); 
     const plantStatus = useSelector(getPlantStatus); 
     const plantError = useSelector(getPlantError); 
     const [plantInfo, setPlantInfo] = useState({});
@@ -27,7 +30,7 @@ const PlantCard = () => {
     const [inputOfNumberValid, setInputOfNumberValid] = useState(true);
     const dispatch = useDispatch(); 
     const navigate = useNavigate(); 
-    
+    console.log(plant)
     useEffect(() => {
         if(plantStatus == 'idle'){
             dispatch(fetchPlant(id))
@@ -65,23 +68,30 @@ const PlantCard = () => {
             ...newObj
         })
     }
+    function handleFileSelection(event){
+        console.log('clicked file')
+        setFileSelection(event, plantInfo, setPlantInfo); 
+    }
     function handleEditMode(){
         setEditMode(!editMode);  
     }; 
 
     function handleSaveEdit(){
         let PlantValidator = new PlantObjectValidator(plantInfo)
-        let result = PlantValidator.validate(); 
+        let result = PlantValidator.validatePlantDetailsObject(); 
         setFormHasAllRequiredFields(PlantValidator.hasAllRequiredFields);
         setInputOfNumberValid(PlantValidator.inputNumberIsValid);
         if(result){
-            dispatch(editPlant(plantInfo));
-            navigate('/plants', {replace: true}); 
+            console.log('success ---->', plantInfo)
+            // dispatch(editPlant(plantInfo));
+            // navigate('/plants', {replace: true}); 
         } 
     }; 
 
     function handleDeleteItem(){
-        dispatch(deletePlant(id)); 
+        //console.log(sectionId, ' parent---->', id, ' childid --> ')
+        let idInfoObject = {sectionId: sectionId, id: id}
+        dispatch(deletePlant(idInfoObject));
         navigate('/plants', {replace: true}); 
     }; 
     
@@ -89,6 +99,7 @@ const PlantCard = () => {
             <Box>
             {formConfirmDeleteVisible && <FormConfirmDelete handleDeleteItem={handleDeleteItem} setFormConfirmDeleteVisible={setFormConfirmDeleteVisible} /> }
                 <Card sx={{ margin: "10px" }}>
+                <Typography variant="h5">{plantParentName}</Typography>
                     {editMode ? (
                     <EditContent plant={plant} plantInfo={plantInfo}
                               formHasAllRequiredFields={formHasAllRequiredFields}
@@ -96,6 +107,7 @@ const PlantCard = () => {
                               handleSaveEdit={handleSaveEdit}
                               handleEditMode={handleEditMode}
                               handleInputChange={handleInputChange}
+                              handleFileSelection={handleFileSelection}
                               />
                     ) : (
                         content

@@ -1,48 +1,41 @@
 import React from 'react';
 import { Card, Typography, CardContent, CardMedia, Box, FormControl, InputLabel, Select, MenuItem, CardActions, Input, Button} from '@mui/material';
-import plantCategories from '../../../lists/plantCategories';
+import typeList from '../../../lists/plantTypeList';
+import EditIcon from '@mui/icons-material/Edit';
 import sizes from '../../../constants/sizes';
 import statuses from '../../../constants/status';
-const EditContent = ({ plant, plantInfo, formHasAllRequiredFields, inputOfNumberValid, handleSaveEdit, handleEditMode, handleInputChange}) => {
 
+const EditContent = ({ plant, plantInfo, formHasAllRequiredFields, inputOfNumberValid, handleSaveEdit, handleEditMode, handleInputChange, handleFileSelection}) => {
+    console.log(plant, plantInfo)
     return (
         <>
         <CardContent>
             <>
-                <input type="file" id="file" style={{ display: 'none' }} />
                 <CardMedia component="img" height="200" image={`${plant?.selectedFiles[0].base64}`} />
+                
+                <input name="selectedFiles" 
+                       id="file" 
+                       type="file" 
+                       style={{ display: 'none' }} 
+                       onChange={handleFileSelection} />
+                <label htmlFor="file">
+                    <Button>
+                        <EditIcon />
+                    </Button>
+                </label>
             </>
             <Box>
                 {!formHasAllRequiredFields && <Typography color="error">* All fields and images are required.</Typography>}
-                {!inputOfNumberValid && <Typography color="error">* Quantity or Price is not a valid number.</Typography>}
+                {!inputOfNumberValid && <Typography color="error">* Price is not a valid number.</Typography>}
             </Box>
             <Box>
-                <FormControl fullWidth>
-                    <InputLabel id="name">Name</InputLabel>
-                    <Input name='name' type="text" id="name" value={plantInfo?.name} sx={{ display: 'block' }} placeholder={`Name: ${plant?.name}`} onChange={handleInputChange}></Input>
-                </FormControl>
                 <Box>
                     <FormControl fullWidth>
-                        <InputLabel id="category">Category</InputLabel>
-                        <Select label="Category" name="category" id="category" value={plantInfo?.category} sx={{ color: 'black' }} onChange={handleInputChange}>
+                        <InputLabel id="category">type</InputLabel>
+                        <Select label="Type" name="type" id="type" value={plantInfo?.type} sx={{ color: 'black' }} onChange={handleInputChange}>
                             <MenuItem value=""> -- </MenuItem>
-                            {plantCategories.map(category => <MenuItem key={plantCategories.indexOf(category)} value={category}>{category}</MenuItem>)}
+                                {typeList.map(genus => <MenuItem key={typeList.indexOf(genus)} value={genus}>{genus}</MenuItem>)}
                         </Select>
-                    </FormControl>
-                </Box>
-                <Box>
-                    <FormControl fullWidth>
-                        <InputLabel id="size">Size</InputLabel>
-                        <Select label="Size" name="size" id="size" value={plantInfo?.size} onChange={handleInputChange}>
-                            <MenuItem value=""> -- </MenuItem>
-                            {sizes.map(size => <MenuItem key={sizes.indexOf(size)} value={size}>{size}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </Box>
-                <Box>
-                    <FormControl fullWidth>
-                        <InputLabel id="quantity">Quantity</InputLabel>
-                            <Input name='quantity' type="number" id="quantity" value={plantInfo?.quantity} sx={{ display: 'block' }} placeholder={plantInfo?.quantity.toString()} onChange={handleInputChange}></Input>
                     </FormControl>
                 </Box>
                 <Box>

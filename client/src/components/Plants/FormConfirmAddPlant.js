@@ -11,7 +11,7 @@ const FormConfirmAddPlant = ({ plantInfo, quantityArray, setFormConfirmVisible, 
             <Box sx={{ backgroundColor: 'whitesmoke'}}>
                 <Box margin='20px 10px'>
                     <Typography><b>Name: </b>{plantInfo.name}</Typography>
-                    <Typography><b>Category: </b>{plantInfo.category}</Typography>
+                    <Typography><b>Genus: </b>{plantInfo.genus}</Typography>
                 </Box>
                 <Box sx={{margin: '0 10px'}}>
                     {quantityArray.map((details) =>(

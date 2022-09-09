@@ -11,12 +11,9 @@ const PresentationContent = ({ plant, handleEditMode, setFormConfirmDeleteVisibl
         <>
         <CardContent>
             <CardMedia component="img" height="200" image={`${plant?.selectedFiles[0].base64}`} />
-            <Typography variant='h4'>{plant?.name}</Typography>
-            <Typography><b>Category: </b>{plant?.category}</Typography>
-            <Typography><b>Size: </b>{plant?.size}</Typography>
-            <Typography><b>Quantity: </b>{plant?.quantity}</Typography>
-            <Typography><b>Description: </b>{plant?.description}</Typography>
+            <Typography><b>Type: </b>{plant?.type}</Typography>
             <Typography><b>Price: </b>${plant?.price}</Typography>
+            <Typography><b>Description: </b>{plant?.description}</Typography>
         </CardContent>
         <CardActions>
             <Box>

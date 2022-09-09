@@ -16,7 +16,7 @@ router.get('/', (req,res)=>{
 router.post('/add-plant', addPlant)
 router.get('/view-plants', getPlants)
 router.get('/view-plant/:id', getPlant)
-router.delete('/delete-plant/:id', deletePlant)
+router.delete('/delete-plant/:sectionId/:id', deletePlant)
 router.patch('/edit-plant', editPlant)
 
 export default router; 

@@ -1,18 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Typography, ListItem, Badge, Box} from '@mui/material';
+import { Button, Typography, ListItem, Badge, Box, Card, CardHeader, CardActionArea, CardActions, CardContent, CardMedia} from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
-
-const PlantListItem = ({ plant }) => {
+import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+const PlantListItem = ({ plant, sectionId }) => {
     
     return (
        <ListItem >
-            <Box sx={{width: '100%'}}>
-                <Typography sx={{ marginRight: '5px' }}>{plant.name}</Typography>
-                <Typography variant="caption">{plant.category}</Typography>
-                <Button><Link to={`/plant-details/${plant._id}`} replace><PreviewIcon /></Link></Button>
-            </Box>
-            <Badge badgeContent={plant.quantity} color="success" ></Badge>
+            <Card sx={{width: '100%'}}>
+                <CardActions>
+                    <Button> <Link to={`/plant-details/${sectionId}/${plant._id}`}><ModeEditOutlineTwoToneIcon /></Link></Button>
+                </CardActions>
+                <CardHeader
+                title={plant.type}
+                subheader={`$${plant.price}`}>
+                </CardHeader>
+                <CardMedia
+                    component="img"
+                    height="194"
+                    image={`${plant.selectedFiles[0].base64}`}
+                    alt="Paella dish"
+                />
+                <CardContent>
+                    <Typography variant="body2" color="text.secondary">{plant.description}</Typography>
+                </CardContent>
+                
+            </Card>
        </ListItem>
     )
 }

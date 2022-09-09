@@ -6,6 +6,7 @@ const slice = createSlice({
     name: 'plant',
     initialState: {
         plant: {},
+        parentName: null,
         status: 'idle', //'idel' | 'loading' | 'succeeded' | 'failed'
         error: null
     },
@@ -22,6 +23,8 @@ const slice = createSlice({
             })
             .addCase(fetchPlant.fulfilled, (state, action) => {
                 if(action.payload != undefined){
+                    state.parentName = action.payload.parentName; 
+                    delete action.payload.parentName; 
                     state.plant.data = action.payload
                     state.status = 'succeeded'
                 }else{
@@ -39,6 +42,7 @@ export default slice.reducer;
 export const { resetState } = slice.actions;
 
 export const SelectSinglePlant = (state) => state.plant.plant.data; 
+export const getPlantParentName = (state) => state.plant.parentName; 
 export const getPlantStatus = (state) => state.plant.status; 
 export const getPlantError = (state) => state.plant.error; 
 
@@ -49,6 +53,8 @@ export const resetPlantstate = async ()=>{
 
 export const fetchPlant = createAsyncThunk('plant/fetchPlant', async (id) => {
     try {
+
+        console.log(id)
         let { data } = await api.fetchOnePlant(id);
         return data
     } catch (error) {

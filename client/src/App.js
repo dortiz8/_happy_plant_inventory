@@ -25,7 +25,7 @@ const App = () => {
                     <Route path='home' element={<Home />}/>
                     <Route path='plants' element={<Plants />} />
                     <Route path='add-plant' element={<FormAddPlant />} />
-                    <Route path='plant-details/:id' element={<PlantCard />} />
+                    <Route path='plant-details/:sectionId/:id' element={<PlantCard />} />
                     <Route path='pots' element={<Pots />} />
                     <Route path='other' element={<Other />} />
                     <Route path='/' element={<Navigate to='home'/>} />

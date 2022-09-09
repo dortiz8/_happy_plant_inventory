@@ -91,7 +91,7 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
         setIsNumericOrPositive(PlantValidator.inputNumberIsValid)
         return result; 
     }
-
+    
     return(
         <>
             <Card sx={{ maxWidth: 345, backgroundColor: '#cfd1d0', margin: '1rem .5rem'}}>

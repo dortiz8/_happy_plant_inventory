@@ -4,15 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 // Redux store functions
 import { createNewPlant} from '../../store/plantsSlice';
 // Material UI Section 
-import { Button, Typography, Paper, Box, Input, InputLabel, Select, MenuItem, List, ListItem, Radio, FormControl, FormLabel, RadioGroup, FormControlLabel} from '@mui/material';
-import CloseRounded from '@mui/icons-material/CloseRounded';
+import { Button, Typography, Paper, Box, Input, InputLabel, Select, MenuItem,Radio, FormControl, FormLabel, RadioGroup, FormControlLabel} from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
 // Component Imports
 import FormConfirmAddPlant from './FormConfirmAddPlant'; 
 import FormConfirmClear from './FormConfirmClear';
 // Other imports 
-import plantCategories from '../../lists/plantCategories';
+import genusList from '../../lists/genusList';
 
 import { useNavigate } from 'react-router';
 import { PlantObjectValidator } from '../../services/validation';
@@ -21,19 +20,15 @@ import GeneralPlantInfo from '../../models/generalPlantInfo';
 import PlantDetails from './PlantSpecifics/PlantDetails';
 import PlantSpecifics from '../../models/plantSpecifics';
 import {nanoid} from 'nanoid'; 
-import plantSpecifics from '../../models/plantSpecifics';
 import WarningMessage from '../Common/WarningMessage';
 
 const FormAddPlant = (e) => {
-    // Initialize the object 
-    let generalPlantObject = new GeneralPlantInfo("", "");
-
-
-    // Component State section 
-    let localStorageData = JSON.parse(localStorage.getItem('plantInfo')) || generalPlantObject; 
+    // Local Storage variables
+    let localStorageData = JSON.parse(localStorage.getItem('plantInfo')) || new GeneralPlantInfo("", "");
     let localStorageQuantityArray = JSON.parse(localStorage.getItem('quantityArray')) || []; 
     let localStoragePlantIndex = JSON.parse(localStorage.getItem('plantIndex')) || 1; 
 
+    // Component State
     const [plantInfo, setPlantInfo] = useState(localStorageData);
     const [quantityArray, setQuantityArray] = useState(localStorageQuantityArray); 
     const [multiple, setMultiple] = useState(quantityArray.length > 1); 
@@ -45,30 +40,36 @@ const FormAddPlant = (e) => {
     const [formConfirmClearVisible, setFormConfirmClearVisible] = useState(false); 
     const [showWarningMessage, setShowWarningMessage] = useState(false); 
 
+    // Dispatch
     const dispatch = useDispatch()
+
+    // Navigation 
     const navigate = useNavigate()
     
+    // Set one default plant card if the array of plants is empty. This allows the user to 
+    // start off with one object when visiting this page. 
     useEffect(()=>{
         if(!quantityArray.length){
             let arr = []; 
             arr.push(new PlantSpecifics("", 0, "", [], 0))
             setQuantityArray(arr); 
         }else{
-            if(!validateQuantityArray(true)){
-                setDisableAdd(true); 
+            if(validateQuantityArray()){
+                setDisableAdd(false); 
             }else{
-                setDisableAdd(false);
+                setDisableAdd(true);
             }
         }
-    },[quantityArray])
-    // Setting plantInfo into local storage
+    },[quantityArray]); 
+
+    // Constantly saving relevant state into local storage in case the user navigates away from the page
     useEffect(()=>{
         localStorage.setItem('plantInfo', JSON.stringify(plantInfo))
         localStorage.setItem('quantityArray', JSON.stringify(quantityArray));
         localStorage.setItem('plantIndex', JSON.stringify(plantIndex));
     }, [plantInfo, quantityArray, plantIndex])
 
-
+    // Handlers and Actions 
     function handleInputChange(event){
         let newObj = {}; 
         if (!isNaN(parseInt(event.target.value))){
@@ -86,9 +87,8 @@ const FormAddPlant = (e) => {
     function handleMultiple(e){
         let val = e.target.value; 
         if(val.toLocaleUpperCase() == "Single".toLocaleUpperCase()){
-            if(quantityArray.length > 1){
-                setShowWarningMessage(true)
-            }
+            if(quantityArray.length > 1) setShowWarningMessage(true)
+            if(quantityArray.length === 1) setMultiple(false); 
         }else{
             setMultiple(true); 
         } 
@@ -127,31 +127,34 @@ const FormAddPlant = (e) => {
         }
     }
     function handleSubmit(e){
+
         e.preventDefault(); 
         // Add quantity array to our plant object
         plantInfo.multiple = quantityArray; 
-        //console.log(plantInfo)
         dispatch(createNewPlant(plantInfo));
-        // setFormConfirmVisible(false); 
-        // setPlantInfo({...generalPlantObject})
-        // localStorage.removeItem('plantInfo'); 
-        // navigate('/plants', {replace: true})
+        setFormConfirmVisible(false); 
+        localStorage.removeItem('plantInfo'); 
+        localStorage.removeItem('quantityArray'); 
+        localStorage.removeItem('plantIndex'); 
+        navigate('/plants', {replace: true})
     }
 
     function handleClearForm(){
-        setPlantInfo(generalPlantObject)
+        let blankPlantObject = new GeneralPlantInfo("", "")
+        setPlantInfo(blankPlantObject)
     }
-    function validateQuantityArray(validateWithoutErrors = null){
+
+    // Form Validation 
+    function validateQuantityArray(){
         let result = true; 
         for (let i = 0; i < quantityArray.length; i++) {
             const details = quantityArray[i];
             if(!details.saved){
-                if(!validateWithoutErrors) setisQuantityArrayValid(false); 
+                setisQuantityArrayValid(false); 
                 return false; 
-            } 
+            }
         }
-        
-        console.log(result, ' qty array')
+        setisQuantityArrayValid(true); 
         return result; 
     }
     function validatePlantObject(){
@@ -173,7 +176,7 @@ const FormAddPlant = (e) => {
                         <Typography>Describe the new member!</Typography>
                     </Box>
                     <Box>
-                        {!formHasAllRequiredFields && <Typography color="error">* Name and Category are required.</Typography>}
+                        {!formHasAllRequiredFields && <Typography color="error">* Name and genus are required.</Typography>}
                         {!isQuantityArrayValid && <Typography color="error">* Please save all plants. You can discard if necessary.</Typography>}
                     </Box>
                     <Box sx={{backgroundColor: '#FAFAFA', margin: '1rem 0'}}>
@@ -182,11 +185,11 @@ const FormAddPlant = (e) => {
                             <Input name="name" type="text" value={plantInfo.name} onChange={handleInputChange}></Input>
                         </Box>
                         <Box>
-                            <InputLabel>Category</InputLabel>
-                            <Select label="Category" name="category" value={plantInfo.category ? plantInfo.category : ''} onChange={handleInputChange}>
+                            <InputLabel>Genus</InputLabel>
+                            <Select label="Genus" name="genus" value={plantInfo.genus ? plantInfo.genus : ''} onChange={handleInputChange}>
                                 <MenuItem value=""> -- </MenuItem>
                                 {
-                                    plantCategories.map(category => <MenuItem key={plantCategories.indexOf(category)} value={category}>{category}</MenuItem>)
+                                    genusList.map(genus => <MenuItem key={genusList.indexOf(genus)} value={genus}>{genus}</MenuItem>)
                                 }
                             </Select>
                         </Box>

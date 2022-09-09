@@ -31,7 +31,7 @@ const selectedFileSchema = mongoose.Schema({
     size: Number, 
     type: String,
 })
-const plantDetailsSchema = mongoose.Schema({
+export const plantDetailsSchema = mongoose.Schema({
     description: String, 
     idx: Number, 
     price: Number,
@@ -42,7 +42,7 @@ const plantDetailsSchema = mongoose.Schema({
 })
 const plantObjectSchema = mongoose.Schema({
     name: String, 
-    category: String, 
+    genus: String, 
     multiple: [plantDetailsSchema], 
 })
 

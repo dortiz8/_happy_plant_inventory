@@ -1,0 +1,1 @@
+export default ["Alocasia", "Anthurium", "Calathea", "Succulent", "Cacti","Hoya", "Monstera","Philodendron", "Pothos"];
