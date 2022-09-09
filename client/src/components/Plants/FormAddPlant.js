@@ -78,10 +78,10 @@ const FormAddPlant = (e) => {
             newObj[event.target.name] = event.target.value;
         }
         
-            setPlantInfo({
-                ...plantInfo, 
-                ...newObj
-            })  
+        setPlantInfo({
+            ...plantInfo, 
+            ...newObj
+        })  
     }; 
     
     function handleMultiple(e){
@@ -122,7 +122,7 @@ const FormAddPlant = (e) => {
     function handlePreSubmit(e){
         // Prevent postback 
         e.preventDefault(); 
-        if (validatePlantObject() && validateQuantityArray()){
+        if (validatePlantObject() && validateQuantityArray(true)){
             setFormConfirmVisible(true); 
         }
     }
@@ -145,12 +145,12 @@ const FormAddPlant = (e) => {
     }
 
     // Form Validation 
-    function validateQuantityArray(){
+    function validateQuantityArray(showMessage = false){
         let result = true; 
         for (let i = 0; i < quantityArray.length; i++) {
             const details = quantityArray[i];
             if(!details.saved){
-                setisQuantityArrayValid(false); 
+                if(showMessage) setisQuantityArrayValid(false); 
                 return false; 
             }
         }

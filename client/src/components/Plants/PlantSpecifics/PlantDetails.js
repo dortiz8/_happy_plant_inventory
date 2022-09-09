@@ -31,7 +31,7 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
         } else {
             newObj[event.target.name] = event.target.value;
         }
-        
+
         setPlantDetails({
             ...plantDetails,
             ...newObj
