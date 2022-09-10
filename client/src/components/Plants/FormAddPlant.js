@@ -72,11 +72,9 @@ const FormAddPlant = (e) => {
     // Handlers and Actions 
     function handleInputChange(event){
         let newObj = {}; 
-        if (!isNaN(parseInt(event.target.value))){
-            newObj[event.target.name] = parseInt(event.target.value);
-        }else{
-            newObj[event.target.name] = event.target.value;
-        }
+
+        if (event.target.name === 'price' && event.target.value > 0) newObj[event.target.name] = parseInt(event.target.value);
+        else newObj[event.target.name] = event.target.value;
         
         setPlantInfo({
             ...plantInfo, 
@@ -189,7 +187,7 @@ const FormAddPlant = (e) => {
                             <Select label="Genus" name="genus" value={plantInfo.genus ? plantInfo.genus : ''} onChange={handleInputChange}>
                                 <MenuItem value=""> -- </MenuItem>
                                 {
-                                    genusList.map(genus => <MenuItem key={genusList.indexOf(genus)} value={genus}>{genus}</MenuItem>)
+                                    genusList.map(genus => <MenuItem key={nanoid()} value={genus}>{genus}</MenuItem>)
                                 }
                             </Select>
                         </Box>

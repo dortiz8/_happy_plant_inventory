@@ -19,18 +19,13 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
     const [uniqueID, setUniqueID] = useState(nanoid()); 
     const [formCompleted, setFormCompleted] = useState(true); 
     const [isNumericOrPositive, setIsNumericOrPositive] = useState(true); 
-   //console.log(plantDetails)
-    // useEffect(()=>{
-    //     localStorage.setItem(`plantDetails:${plantInfo.idx}`, JSON.stringify(plantDetails))
-    // });
+   console.log(plantDetails)
 
     function handleInputChange(event) {
         let newObj = {};
-        if (!isNaN(parseInt(event.target.value))) {
-            newObj[event.target.name] = parseInt(event.target.value);
-        } else {
-            newObj[event.target.name] = event.target.value;
-        }
+
+        if (event.target.name === 'price' && event.target.value > 0) newObj[event.target.name] = parseInt(event.target.value);
+        else newObj[event.target.name] = event.target.value;
 
         setPlantDetails({
             ...plantDetails,
@@ -117,7 +112,7 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
                             disabled={plantDetails.saved}
                             onChange={handleInputChange}>
                             <MenuItem value="">--</MenuItem>
-                            {plantType.map(type => <MenuItem value={type} key={plantType.indexOf(type)}>{type}</MenuItem>)}
+                            {plantType.map(type => <MenuItem value={type} key={nanoid()}>{type}</MenuItem>)}
                         </Select>
                     </Box>
                     <Box>
@@ -163,7 +158,7 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
                         </label>
                         <Box>
                             <List >
-                                {plantDetails.selectedFiles.map(file => <ListItem key={plantDetails.selectedFiles.indexOf(file)}>
+                                {plantDetails.selectedFiles.map(file => <ListItem key={nanoid()}>
                                     <Typography variant="subtitle2">{`${file.name.slice(0, 10)}...${file.name.slice(file.name.length - 4, file.name.length)}`}</Typography>
                                     <Button
                                         disabled={plantDetails.saved}

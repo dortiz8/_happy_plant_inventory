@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Typography, Box, List, ListItem } from '@mui/material';
+import { nanoid } from 'nanoid';
 
 const FormConfirmAddPlant = ({ plantInfo, quantityArray, setFormConfirmVisible, handleSubmit}) => {
     
@@ -15,21 +16,21 @@ const FormConfirmAddPlant = ({ plantInfo, quantityArray, setFormConfirmVisible, 
                 </Box>
                 <Box sx={{margin: '0 10px'}}>
                     {quantityArray.map((details) =>(
-                        <>
-                            <Box sx={{ margin: '0 10px', padding: '5px', border: '1px solid black', height: '200px' }}>
+                        
+                            <Box sx={{ margin: '0 10px', padding: '5px', border: '1px solid black', height: '200px' }} key={nanoid()}>
                                 <Typography><b>Description:</b> {details.description}</Typography>
                                 <Typography><b>Price:</b>Price: ${details.price}</Typography>
                                 <Typography><b>Cut: </b>{details.type}</Typography>
                                 <Box>
                                     <Typography><b>Images</b></Typography>
                                     <List>
-                                        {details.selectedFiles.map(file => <ListItem key={details.selectedFiles.indexOf(file)}>
+                                        {details.selectedFiles.map(file => <ListItem key={nanoid()}>
                                             <Typography variant="subtitle2">{`${file.name.slice(0, 10)}...${file.name.slice(file.name.length - 4, file.name.length)}`}</Typography>
                                         </ListItem>)}
                                     </List>
                                 </Box>
                             </Box>
-                        </>
+                        
                     ))}
                 </Box>
                 <Box textAlign='center'>
