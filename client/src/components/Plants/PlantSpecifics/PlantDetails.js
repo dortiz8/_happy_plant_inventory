@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Typography, Box, List, ListItem, TextField, IconButton, Card, CardHeader, CardContent, CardActions, Select, MenuItem} from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import DoneIcon from '@mui/icons-material/Done';
+import { NumericFormat } from 'react-number-format';
 import {CHARACTER_LIMIT} from '../../../constants/limits'; 
 
 import selectedFile from '../../../models/fileClass';
@@ -19,14 +22,17 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
     const [uniqueID, setUniqueID] = useState(nanoid()); 
     const [formCompleted, setFormCompleted] = useState(true); 
     const [isNumericOrPositive, setIsNumericOrPositive] = useState(true); 
+    const regex = new RegExp('^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\.[0 - 9]{2}$')
    console.log(plantDetails)
 
     function handleInputChange(event) {
         let newObj = {};
 
-        if (event.target.name === 'price' && event.target.value > 0) newObj[event.target.name] = parseInt(event.target.value);
-        else newObj[event.target.name] = event.target.value;
-
+        if (event.target.name === 'price' && regex.test(event.target.value)){
+            newObj[event.target.name] = event.target.value
+        }
+        // else newObj[event.target.name] = event.target.value;
+        newObj[event.target.name] = event.target.value;
         setPlantDetails({
             ...plantDetails,
             ...newObj
@@ -117,13 +123,13 @@ const PlantDetails = ({ plantInfo, listIndex, handleSavePlant, handleDeletePlant
                     </Box>
                     <Box>
                         <TextField
-                            label="Price"
+                            label="Price $"
                             name="price"
+                            id="price"
                             disabled={plantDetails.saved}
-                            fullWidth
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
+                            inputProps={{
+                                inputMode: 'numeric', pattern: '[0-9]*' }}
                             value={plantDetails.price}
-                            variant="outlined"
                             onChange={handleInputChange}
                         />
                     </Box>

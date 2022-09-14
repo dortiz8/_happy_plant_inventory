@@ -19,7 +19,7 @@ const FormConfirmAddPlant = ({ plantInfo, quantityArray, setFormConfirmVisible, 
                         
                             <Box sx={{ margin: '0 10px', padding: '5px', border: '1px solid black', height: '200px' }} key={nanoid()}>
                                 <Typography><b>Description:</b> {details.description}</Typography>
-                                <Typography><b>Price:</b>Price: ${details.price}</Typography>
+                                <Typography><b>Price:</b>Price: ${parseFloat(details.price).toFixed(2)}</Typography>
                                 <Typography><b>Cut: </b>{details.type}</Typography>
                                 <Box>
                                     <Typography><b>Images</b></Typography>

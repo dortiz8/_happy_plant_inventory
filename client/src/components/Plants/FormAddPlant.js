@@ -112,6 +112,9 @@ const FormAddPlant = (e) => {
         // validation here
         let newObj = quantityArray.find(obj => detailsObj.idx == obj.idx)
         let idxOfObj = quantityArray.indexOf(newObj);
+        // Change price to float with two decimal places 
+        detailsObj.price = parseFloat(detailsObj.price).toFixed(2); 
+        // Mark the object as saved
         detailsObj.saved = true; 
         let newArr = [...quantityArray.slice(0,idxOfObj), detailsObj, ...quantityArray.slice(idxOfObj+1)]; 
         setQuantityArray(newArr); 
